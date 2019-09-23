@@ -13,7 +13,7 @@ use super::{
     articulation_link::ArticulationLink, base::Base, body::*, math::Bounds, px_type::*,
     transform::*, user_data::UserData,
 };
-use nalgebra_glm as glm;
+use glam::{Vec3, Vec4, Mat4};
 use physx_macros::*;
 use physx_sys::{
     PxArticulationBase, PxArticulationBase_createLink_mut, PxArticulationBase_getNbLinks,
@@ -177,11 +177,11 @@ impl ArticulationBase {
     pub fn create_link(
         &mut self,
         parent: PartHandle,
-        transform: Option<glm::Mat4>,
-        joint_transform: Option<glm::Mat4>,
+        transform: Option<Mat4>,
+        joint_transform: Option<Mat4>,
     ) -> *mut PxArticulationLink {
         let (parent, trans) = if parent.1 == 0 {
-            (null_mut(), glm::Mat4::identity())
+            (null_mut(), Mat4::identity())
         } else {
             let parent_link = parent.1 as *mut PxArticulationLink;
             (parent_link, unsafe {
@@ -191,8 +191,8 @@ impl ArticulationBase {
             })
         };
 
-        let transform = joint_transform.unwrap_or_else(glm::Mat4::identity)
-            * transform.unwrap_or_else(glm::Mat4::identity);
+        let transform = joint_transform.unwrap_or_else(Mat4::identity)
+            * transform.unwrap_or_else(Mat4::identity);
         // eprintln!("creating link with transform: {}", trans * transform);
         unsafe {
             PxArticulationBase_createLink_mut(

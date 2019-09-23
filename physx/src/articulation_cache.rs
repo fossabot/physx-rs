@@ -15,7 +15,7 @@ use super::{
 };
 use enumflags2::BitFlags;
 use enumflags2_derive::EnumFlags;
-use nalgebra_glm as glm;
+use glam::{Vec3, Vec2, Vec4, Quat};
 use physx_sys::{
     PxArticulationCache, PxArticulationCacheFlags, PxArticulationRootLinkData, PxTransform_new_5,
 };
@@ -55,11 +55,11 @@ macro_rules! ptr_to_slice {
 }
 
 pub struct ArticulationRootLinkData {
-    pub transform: (glm::Quat, glm::Vec3),
-    pub world_lin_vel: glm::Vec3,
-    pub world_ang_vel: glm::Vec3,
-    pub world_lin_accel: glm::Vec3,
-    pub world_ang_accel: glm::Vec3,
+    pub transform: (Quat, Vec3),
+    pub world_lin_vel: Vec3,
+    pub world_ang_vel: Vec3,
+    pub world_lin_accel: Vec3,
+    pub world_ang_accel: Vec3,
 }
 
 impl From<PxArticulationRootLinkData> for ArticulationRootLinkData {

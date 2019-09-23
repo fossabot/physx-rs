@@ -10,12 +10,12 @@
 */
 
 use super::transform::*;
-use nalgebra_glm as glm;
+use glam::{Vec3, Vec2, Vec4};
 use physx_sys::PxBounds3;
 
 pub struct Bounds {
-    pub min_size: glm::Vec3,
-    pub max_size: glm::Vec3,
+    pub min_size: Vec3,
+    pub max_size: Vec3,
 }
 
 impl From<PxBounds3> for Bounds {

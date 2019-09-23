@@ -10,7 +10,7 @@
 */
 
 use super::{foundation::*, geometry::*, px_type::*, transform::na_to_px_v3};
-use nalgebra_glm as glm;
+use glam::{Vec3, Vec2, Vec4};
 use physx_macros::*;
 use physx_sys::*;
 
@@ -54,7 +54,7 @@ impl Cooking {
                     &mut cooking_result,
                 );
 
-                let mesh_scale = glm::vec3(XZ_SCALE, HEIGHT_SCALE, XZ_SCALE);
+                let mesh_scale = Vec3::new(XZ_SCALE, HEIGHT_SCALE, XZ_SCALE);
                 let mesh_scale = PxMeshScale_new_2(&na_to_px_v3(mesh_scale));
 
                 Ok(Geometry::TriangleMesh(PxTriangleMeshGeometry_new_1(

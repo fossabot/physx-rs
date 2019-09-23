@@ -13,7 +13,7 @@ use super::{
     rigid_dynamic::*, rigid_static::*, scene::*, traits::GetRaw, transform::*, visual_debugger::*,
 };
 
-use nalgebra_glm as glm;
+use glam::{Vec3, Vec2, Vec4, Mat4};
 use physx_sys::*;
 use std::ptr::null_mut;
 
@@ -139,7 +139,7 @@ impl Physics {
         scene.remove_articulation(handle);
     }
 
-    pub fn create_rigid_static(&mut self, transform: glm::Mat4) -> RigidStatic {
+    pub fn create_rigid_static(&mut self, transform: Mat4) -> RigidStatic {
         let px_rs =
             unsafe { PxPhysics_createRigidStatic_mut(self.get_raw_mut(), &na_to_px_tf(transform)) };
 
@@ -148,11 +148,11 @@ impl Physics {
 
     pub unsafe fn create_dynamic(
         &mut self,
-        transform: glm::Mat4,
+        transform: Mat4,
         geometry: *const PxGeometry,
         material: *mut PxMaterial,
         density: f32,
-        shape_transform: glm::Mat4,
+        shape_transform: Mat4,
     ) -> RigidDynamic {
         let px_rs = phys_PxCreateDynamic(
             self.get_raw_mut(),
@@ -168,10 +168,10 @@ impl Physics {
 
     pub unsafe fn create_static(
         &mut self,
-        transform: glm::Mat4,
+        transform: Mat4,
         geometry: *const PxGeometry,
         material: *mut PxMaterial,
-        shape_transform: glm::Mat4,
+        shape_transform: Mat4,
     ) -> RigidStatic {
         let px_rs = phys_PxCreateStatic(
             self.get_raw_mut(),
@@ -196,11 +196,11 @@ impl Physics {
     /// Create an infinite plane, parametrized by a normal, an offset, and a material of the surface.
     pub unsafe fn create_plane(
         &mut self,
-        normal: glm::Vec3,
+        normal: Vec3,
         offset: f32,
         material: *mut PxMaterial,
     ) -> RigidStatic {
-        let plane = PxPlane_new_1(normal.x, normal.y, normal.z, offset);
+        let plane = PxPlane_new_1(normal.x(), normal.y(), normal.z(), offset);
         RigidStatic::new(phys_PxCreatePlane(self.get_raw_mut(), &plane, material))
     }
 

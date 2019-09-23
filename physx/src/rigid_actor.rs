@@ -21,7 +21,7 @@ use super::{
     user_data::UserData,
 };
 use enumflags2::BitFlags;
-use nalgebra_glm as glm;
+use glam::{Vec3, Vec2, Vec4, Mat4};
 use physx_macros::physx_type;
 use physx_sys::{
     phys_PxGetPhysics, PxContactPair, PxContactPairPoint, PxContactPair_extractContacts,
@@ -47,17 +47,17 @@ impl RigidActor {
     }
 
     /// Get the global pose of this rigid actor
-    pub fn get_global_pose(&self) -> glm::Mat4 {
+    pub fn get_global_pose(&self) -> Mat4 {
         px_to_na_tf(unsafe { PxRigidActor_getGlobalPose(self.get_raw()) })
     }
 
     /// Get the global pose of this rigid actor
-    pub fn get_global_position(&self) -> glm::Vec3 {
+    pub fn get_global_position(&self) -> Vec3 {
         px_to_na_v3(unsafe { PxRigidActor_getGlobalPose(self.get_raw()).p })
     }
 
     /// Set the global pose of this rigid actor
-    pub fn set_global_pose(&mut self, pose: glm::Mat4, autowake: bool) {
+    pub fn set_global_pose(&mut self, pose: Mat4, autowake: bool) {
         unsafe {
             PxRigidActor_setGlobalPose_mut(self.get_raw_mut(), &na_to_px_tf(pose), autowake);
         }
@@ -69,7 +69,7 @@ impl RigidActor {
     }
 
     /// Get transform for shape with index
-    pub fn get_shape_transform(&self, index: u32) -> glm::Mat4 {
+    pub fn get_shape_transform(&self, index: u32) -> Mat4 {
         assert!(
             index < self.get_nb_shapes(),
             "shape index out of bounds: {} >= {}",
@@ -123,8 +123,8 @@ impl RigidActor {
     pub fn create_exclusive_shape(
         &mut self,
         geometry: PhysicsGeometry,
-        orientation: glm::Mat4,
-        translation: glm::Mat4,
+        orientation: Mat4,
+        translation: Mat4,
     ) {
         let shapeflags = PxShapeFlags {
             mBits: (PxShapeFlag::eVISUALIZATION | PxShapeFlag::eSIMULATION_SHAPE) as u8,
@@ -134,9 +134,9 @@ impl RigidActor {
             let mtrl = PxPhysics_createMaterial_mut(phys_PxGetPhysics(), 0.9, 0.9, 0.0);
             let angle: f32 = -90.0;
             let rotation = if geometry.get_type() == GeometryType::Capsule {
-                glm::rotate_y(&glm::Mat4::identity(), angle.to_radians())
+                glm::rotate_y(&Mat4::identity(), angle.to_radians())
             } else {
-                glm::Mat4::identity()
+                Mat4::identity()
             };
 
             let shape = PxRigidActorExt_createExclusiveShape_mut_1(

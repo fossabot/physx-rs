@@ -22,7 +22,7 @@ use super::{
     visual_debugger::*,
 };
 use enumflags2_derive::EnumFlags;
-use nalgebra_glm as glm;
+use glam::{Vec3, Vec2, Vec4};
 
 use physx_sys::*;
 use std::ops::{Deref, DerefMut};
@@ -203,10 +203,10 @@ impl Scene {
 
     pub fn sample_height(
         &self,
-        position: glm::Vec3,
+        position: Vec3,
         ignored: Option<&RigidActor>,
         ignore_dynamic: bool,
-    ) -> Option<glm::Vec3> {
+    ) -> Option<Vec3> {
         // todo[tolsson]: clean this up
         let ignored_body = if let Some(body) = ignored {
             body.get_raw()
@@ -214,7 +214,7 @@ impl Scene {
             null_mut()
         };
 
-        let down = -glm::Vec3::y_axis();
+        let down = -Vec3::unit_y();
         let max_dist = 1e5;
 
         unsafe {
@@ -235,7 +235,7 @@ impl Scene {
                     .expect("failed reading from scene")
                     .expect("accessing null ptr"),
                 &na_to_px_v3(position),
-                &na_to_px_v3(down.into_inner()),
+                &na_to_px_v3(down),
                 max_dist,
                 PxSceneQueryFlags {
                     mBits: PxHitFlag::ePOSITION as u16,
@@ -462,7 +462,7 @@ pub enum SimulationThreadType {
 }
 
 pub struct SceneBuilder {
-    pub(crate) gravity: glm::Vec3,
+    pub(crate) gravity: Vec3,
     pub(crate) simulation_filter_shader: Option<SimulationFilterShader>,
     pub(crate) simulation_threading: Option<SimulationThreadType>,
     pub(crate) broad_phase_type: BroadPhaseType,
@@ -471,7 +471,7 @@ pub struct SceneBuilder {
 impl Default for SceneBuilder {
     fn default() -> Self {
         Self {
-            gravity: glm::vec3(0.0, -9.80665, 0.0), // standard gravity value
+            gravity: Vec3::new(0.0, -9.80665, 0.0), // standard gravity value
             simulation_filter_shader: None,
             simulation_threading: None,
             broad_phase_type: BroadPhaseType::SweepAndPrune,
@@ -483,7 +483,7 @@ impl SceneBuilder {
     /// Set the gravity for the scene.
     ///
     /// Default: [0.0, -9.80665, 0.0] (standard gravity)
-    pub fn set_gravity(&mut self, gravity: glm::Vec3) -> &mut Self {
+    pub fn set_gravity(&mut self, gravity: Vec3) -> &mut Self {
         self.gravity = gravity;
         self
     }

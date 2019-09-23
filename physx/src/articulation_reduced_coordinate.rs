@@ -23,7 +23,7 @@ use super::{
     user_data::UserData,
 };
 use enumflags2::BitFlags;
-use nalgebra_glm as glm;
+use glam::{Vec3, Vec2, Vec4, Mat4};
 use physx_macros::*;
 use physx_sys::*;
 use std::ptr::{null, null_mut};
@@ -89,10 +89,10 @@ impl ArticulationReducedCoordinate {
         let articulation =
             unsafe { PxPhysics_createArticulationReducedCoordinate_mut(physics.get_raw_mut()) };
 
-        let parent_quat = nalgebra::UnitQuaternion::from_euler_angles(
-            builder.parent_rotation.x,
-            builder.parent_rotation.y,
-            builder.parent_rotation.z,
+        let parent_quat = Quat::from_euler_angles(
+            builder.parent_rotation.x(),
+            builder.parent_rotation.y(),
+            builder.parent_rotation.z(),
         );
 
         let transform = nalgebra::Isometry3::from_parts(builder.parent_offset.into(), parent_quat);
@@ -111,7 +111,7 @@ impl ArticulationReducedCoordinate {
 
         if let Some(ref collider) = builder.collider {
             let geometry = cooking.make_geometry(collider.clone());
-            link.create_exclusive_shape(geometry, glm::Mat4::identity(), glm::Mat4::identity());
+            link.create_exclusive_shape(geometry, Mat4::identity(), Mat4::identity());
         }
 
         let mut _self = Self { ptr: articulation };
@@ -225,12 +225,12 @@ impl ArticulationReducedCoordinate {
     }
     //
     /// Get the pose of the body in the world
-    pub fn global_pose(&self) -> glm::Mat4 {
+    pub fn global_pose(&self) -> Mat4 {
         self.root().get_global_pose()
     }
 
     /// Teleport the whole body to the transform and and orientation given by `Pose`
-    pub fn teleport_to(&mut self, pose: glm::Mat4) {
+    pub fn teleport_to(&mut self, pose: Mat4) {
         // self.links[0].set_transform(pose);
         self.common_init();
         unsafe {
@@ -430,7 +430,7 @@ impl ArticulationReducedCoordinate {
     }
 
     /// Compute the total center of mass w.r.t. all attached shapes
-    pub fn get_center_of_mass(&self) -> glm::Vec3 {
+    pub fn get_center_of_mass(&self) -> Vec3 {
         let nb_shapes = self
             .iter_links()
             .fold(0, |accum, link| accum + link.get_nb_shapes()) as usize;
@@ -450,7 +450,7 @@ impl ArticulationReducedCoordinate {
             )
         };
 
-        glm::vec3(
+        Vec3::new(
             props.centerOfMass.x,
             props.centerOfMass.y,
             props.centerOfMass.z,
@@ -458,7 +458,7 @@ impl ArticulationReducedCoordinate {
     }
 
     /// Compute the total center of mass and velocity w.r.t. all attached shapes
-    pub fn get_center_of_mass_and_velocity(&self) -> (glm::Vec3, glm::Vec3) {
+    pub fn get_center_of_mass_and_velocity(&self) -> (Vec3, Vec3) {
         let nb_shapes = self
             .iter_links()
             .fold(0, |accum, link| accum + link.get_nb_shapes()) as usize;
@@ -485,8 +485,8 @@ impl ArticulationReducedCoordinate {
         (px_to_na_v3(props.centerOfMass), px_to_na_v3(com_vel))
     }
 
-    pub fn get_origin(&self) -> glm::Vec3 {
-        glm::Vec3::zeros() // todo[tolsson]
+    pub fn get_origin(&self) -> Vec3 {
+        Vec3::zero() // todo[tolsson]
     }
 
     /// Set the collision layer on all links and shapes of this body
