@@ -10,7 +10,7 @@
 */
 
 use super::{foundation::*, geometry::*, px_type::*, transform::na_to_px_v3};
-use glam::{Vec2, Vec3, Vec4};
+use glam::{ Vec3, };
 use physx_macros::*;
 use physx_sys::*;
 

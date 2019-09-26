@@ -11,7 +11,7 @@
 use super::{px_type::*, rigid_actor::RigidActor, transform::*};
 use enumflags2::*;
 use enumflags2_derive::*;
-use glam::{Mat4, Vec2, Vec3, Vec4};
+use glam::{Mat4, Vec3};
 use physx_macros::*;
 use physx_sys::{
     PxForceMode, PxRigidBody, PxRigidBodyFlag, PxRigidBodyFlags, PxRigidBody_addForce_mut,

@@ -15,7 +15,7 @@ use super::{
 };
 use enumflags2::BitFlags;
 use enumflags2_derive::EnumFlags;
-use glam::{Quat, Vec2, Vec3, Vec4};
+use glam::{Quat, Vec3, };
 use physx_sys::{
     PxArticulationCache, PxArticulationCacheFlags, PxArticulationRootLinkData, PxTransform_new_5,
 };

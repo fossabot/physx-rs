@@ -76,7 +76,7 @@ impl<'a> HeightfieldBuilder<'a> {
         Self { flags, ..self }
     }
 
-    fn generate_heights(&self) -> Vec<f32> {
+    pub fn generate_heights(&self) -> Vec<f32> {
         let mut heights = vec![0.0; self.size.0 * self.size.1];
         for y in 0..self.size.1 {
             for x in 0..self.size.0 {
@@ -88,7 +88,7 @@ impl<'a> HeightfieldBuilder<'a> {
 
     ////////////////////////////////////////////////////////////////////////////////
 
-    fn generate_vertices(&self, heights: &[f32]) -> Vec<Vec3> {
+    pub fn generate_vertices(&self, heights: &[f32]) -> Vec<Vec3> {
         let mut vertices: Vec<Vec3> = Vec::new();
         vertices.reserve(heights.len());
         for y in 0..self.size.1 {

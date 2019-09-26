@@ -15,7 +15,7 @@ Mat4 as the corresponding type for a PxTransform which is a (Quaternion,
 Vector) pair.
 */
 
-use glam::{Mat4, Quat, Vec2, Vec3, Vec4};
+use glam::{Mat4, Quat, Vec3, };
 use physx_sys::{
     PxIdentity, PxQuat, PxQuat_new_3, PxTransform, PxTransform_new_2, PxTransform_new_4, PxVec3,
     PxVec3_new_3,
@@ -37,15 +37,6 @@ impl From<Quat> for PxQuatWrap {
 impl Into<PxQuat> for PxQuatWrap {
     /// Unwrap helper
     fn into(self) -> PxQuat {
-        self.0
-    }
-}
-
-struct PxTransformWrap(PxTransform);
-
-impl Into<PxTransform> for PxTransformWrap {
-    /// Unwrap helper
-    fn into(self) -> PxTransform {
         self.0
     }
 }

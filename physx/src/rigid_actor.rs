@@ -21,7 +21,7 @@ use super::{
     user_data::UserData,
 };
 use enumflags2::BitFlags;
-use glam::{Angle, Mat4, Vec2, Vec3, Vec4};
+use glam::{Angle, Mat4, Vec3};
 use physx_macros::physx_type;
 use physx_sys::{
     phys_PxGetPhysics, PxContactPair, PxContactPairPoint, PxContactPair_extractContacts,

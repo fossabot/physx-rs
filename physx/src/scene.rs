@@ -22,7 +22,7 @@ use super::{
     visual_debugger::*,
 };
 use enumflags2_derive::EnumFlags;
-use glam::{Vec2, Vec3, Vec4};
+use glam::{Vec3, };
 
 use physx_sys::*;
 use std::ops::{Deref, DerefMut};
