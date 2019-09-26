@@ -13,7 +13,7 @@
 
 use physx_sys::*;
 
-use glam::{Vec3, Vec2, Vec4};
+use glam::{Vec2, Vec3, Vec4};
 pub type Point3 = Vec3;
 
 #[derive(Debug, Clone, Copy, PartialEq)]

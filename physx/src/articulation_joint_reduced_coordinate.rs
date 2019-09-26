@@ -11,8 +11,8 @@
 use super::{
     articulation_joint_base::*, articulation_link::ArticulationDriveType, body::*, px_type::*,
 };
+use glam::{Mat4, Vec2, Vec3, Vec4};
 use log::*;
-use glam::{Vec3, Vec2, Vec4, Mat4};
 use physx_macros::*;
 use physx_sys::*;
 

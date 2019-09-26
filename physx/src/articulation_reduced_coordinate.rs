@@ -15,6 +15,7 @@ use super::{
     articulation_link::*,
     body::*,
     cooking::*,
+    math::Isometry,
     physics::Physics,
     px_type::*,
     shape::CollisionLayer,
@@ -23,7 +24,7 @@ use super::{
     user_data::UserData,
 };
 use enumflags2::BitFlags;
-use glam::{Vec3, Vec2, Vec4, Mat4};
+use glam::{Angle, Mat4, Quat, Vec3};
 use physx_macros::*;
 use physx_sys::*;
 use std::ptr::{null, null_mut};
@@ -89,13 +90,14 @@ impl ArticulationReducedCoordinate {
         let articulation =
             unsafe { PxPhysics_createArticulationReducedCoordinate_mut(physics.get_raw_mut()) };
 
-        let parent_quat = Quat::from_euler_angles(
-            builder.parent_rotation.x(),
-            builder.parent_rotation.y(),
-            builder.parent_rotation.z(),
+        let parent_quat = Quat::from_rotation_ypr(
+            Angle::from_radians(builder.parent_rotation.x()),
+            Angle::from_radians(builder.parent_rotation.y()),
+            Angle::from_radians(builder.parent_rotation.z()),
         );
 
-        let transform = nalgebra::Isometry3::from_parts(builder.parent_offset.into(), parent_quat);
+        //let transform = nalgebra::Isometry3::from_parts(builder.parent_offset.into(), parent_quat);
+        let transform = Mat4::from_rotation_translation(parent_quat, builder.parent_offset);
         let root_raw_link = unsafe {
             PxArticulationBase_createLink_mut(
                 articulation as *mut PxArticulationBase,

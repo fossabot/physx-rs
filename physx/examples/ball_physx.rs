@@ -2,7 +2,7 @@
 // Copyright © 2019, Embark Studios, all rights reserved.
 // Created:  3 July 2019
 
-use glam::{Vec3, Vec2, Vec4};
+use glam::{Vec2, Vec3, Vec4};
 use physx::prelude::*;
 
 const PX_PHYSICS_VERSION: u32 = physx::version(4, 1, 0);

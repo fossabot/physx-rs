@@ -12,8 +12,8 @@
 use super::articulation_joint_base::ArticulationJointBase;
 use super::px_type::*;
 use super::transform::na_to_px_q;
+use glam::Quat;
 use log::*;
-use glam::{Vec3, Vec2, Vec4, Mat4};
 use physx_macros::*;
 use physx_sys::*;
 

@@ -15,7 +15,7 @@ Mat4 as the corresponding type for a PxTransform which is a (Quaternion,
 Vector) pair.
 */
 
-use glam::{Vec3, Vec2, Vec4, Mat4, Quat};
+use glam::{Mat4, Quat, Vec2, Vec3, Vec4};
 use physx_sys::{
     PxIdentity, PxQuat, PxQuat_new_3, PxTransform, PxTransform_new_2, PxTransform_new_4, PxVec3,
     PxVec3_new_3,
@@ -30,14 +30,7 @@ impl From<Quat> for PxQuatWrap {
     /// Convert from an nalgebra isometry into a PxTransform
     fn from(other: Quat) -> Self {
         let (x, y, z, w) = other.into();
-        PxQuatWrap(unsafe {
-            PxQuat_new_3(
-                x,
-                y,
-                z,
-                w,
-            )
-        })
+        PxQuatWrap(unsafe { PxQuat_new_3(x, y, z, w) })
     }
 }
 

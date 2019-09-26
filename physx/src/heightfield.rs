@@ -14,7 +14,7 @@ use super::{
 };
 use enumflags2::BitFlags;
 use enumflags2_derive::EnumFlags;
-use glam::{Vec3, Vec2, Vec4};
+use glam::Vec3;
 use physx_sys::*;
 
 #[derive(Debug, Copy, Clone)]
@@ -88,8 +88,8 @@ impl<'a> HeightfieldBuilder<'a> {
 
     ////////////////////////////////////////////////////////////////////////////////
 
-    fn generate_vertices(&self, heights: &[f32]) -> Vec<nalgebra::Point3<f32>> {
-        let mut vertices: Vec<nalgebra::Point3<f32>> = Vec::new();
+    fn generate_vertices(&self, heights: &[f32]) -> Vec<Vec3> {
+        let mut vertices: Vec<Vec3> = Vec::new();
         vertices.reserve(heights.len());
         for y in 0..self.size.1 {
             for x in 0..self.size.0 {

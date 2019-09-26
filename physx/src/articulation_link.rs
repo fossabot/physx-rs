@@ -15,6 +15,7 @@ use super::{
     articulation_reduced_coordinate::ArticulationReducedCoordinate,
     body::PartHandle,
     geometry::*,
+    math::Isometry,
     px_type::*,
     rigid_actor::RigidActor,
     rigid_body::RigidBody,
@@ -22,7 +23,7 @@ use super::{
     traits::{Collidable, Releasable},
     user_data::UserData,
 };
-use glam::{Mat4, Vec2, Quat};
+use glam::{Angle, Mat4, Quat, Vec3};
 use log::*;
 use physx_macros::*;
 use physx_sys::*;
@@ -238,12 +239,12 @@ impl ArticulationLinkBuilder {
         joint_transform: Option<Mat4>,
     ) -> PartHandle {
         let parent_quat = Quat::from_rotation_ypr(
-            self.parent_rotation.x(),
-            self.parent_rotation.y(),
-            self.parent_rotation.z(),
+            Angle::from_radians(self.parent_rotation.x()),
+            Angle::from_radians(self.parent_rotation.y()),
+            Angle::from_radians(self.parent_rotation.z()),
         );
 
-        let transform = Mat4::from_rotation_translation(self.parent_offset, parent_quat);
+        let transform = Mat4::from_rotation_translation(parent_quat, self.parent_offset);
         let raw_link = body.create_link(parent, Some(transform.into()), joint_transform);
 
         let mut link = ArticulationLink::new(raw_link);
@@ -253,8 +254,7 @@ impl ArticulationLinkBuilder {
 
         if let Some(ref collider) = self.collider {
             let geometry: PhysicsGeometry = collider.into();
-            let collider_pose: nalgebra::Isometry3<f32> =
-                glm::try_convert(self.collider_transform).unwrap();
+            let collider_pose = Isometry::from_mat4(&self.collider_transform);
 
             let collider_orientation: Mat4 = collider_pose.rotation.into();
             let collider_translation: Mat4 = collider_pose.translation.into();
