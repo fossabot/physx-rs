@@ -2,7 +2,7 @@
 // Copyright © 2019, Embark Studios, all rights reserved.
 // Created:  3 July 2019
 
-use glam::{Vec2, Vec3, Vec4};
+use glam::{Mat4, Vec3};
 use physx::prelude::*;
 
 const PX_PHYSICS_VERSION: u32 = physx::version(4, 1, 0);
@@ -38,7 +38,7 @@ fn main() {
     let sphere_geo = PhysicsGeometry::from(&ColliderDesc::Sphere(10.0));
     let mut sphere_actor = unsafe {
         physics.create_dynamic(
-            glm::translation(&Vec3::new(0.0, 40.0, 100.0)),
+            Mat4::from_translation(Vec3::new(0.0, 40.0, 100.0)),
             sphere_geo.as_raw(), // todo: this should take the PhysicsGeometry straight.
             material,
             10.0,
@@ -60,7 +60,7 @@ fn main() {
             // RigidActor-type so we can use the unchecked API
             unsafe { scene.get_rigid_actor_unchecked(&sphere_handle) }
                 .get_global_position()
-                .y as i32
+                .y() as i32
                 - 10
         })
         .collect::<Vec<_>>();

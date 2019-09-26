@@ -15,7 +15,6 @@ use super::{
     articulation_link::*,
     body::*,
     cooking::*,
-    math::Isometry,
     physics::Physics,
     px_type::*,
     shape::CollisionLayer,
