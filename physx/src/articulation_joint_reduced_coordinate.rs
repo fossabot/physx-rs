@@ -246,7 +246,7 @@ impl Default for JointBuilder {
     fn default() -> Self {
         Self {
             joint_type: ArticulationJointType::Undefined,
-            axis: Vec3::unit_x(), // fixme[tolsson]: maybe store a unit...
+            axis: Vec3::unit_x(),
             joint_frame: Mat4::identity(),
             joint_limit: [-std::f32::consts::PI, std::f32::consts::PI],
         }
