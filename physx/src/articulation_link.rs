@@ -23,7 +23,7 @@ use super::{
     traits::{Collidable, Releasable},
     user_data::UserData,
 };
-use glam::{Angle, Mat4, Quat, Vec3};
+use glam::{Mat4, Quat, Vec3};
 use log::*;
 use physx_macros::*;
 use physx_sys::*;
@@ -204,7 +204,7 @@ impl ArticulationLink {
 
 pub struct ArticulationLinkBuilder {
     pub(super) parent_offset: Vec3,
-    pub(super) parent_rotation: Vec3,
+    pub(super) parent_rotation: Quat,
     pub(super) name: String,
     mass: f32,
 
@@ -219,7 +219,7 @@ impl Default for ArticulationLinkBuilder {
     fn default() -> Self {
         Self {
             parent_offset: Vec3::zero(),
-            parent_rotation: Vec3::zero(),
+            parent_rotation: Quat::identity(),
             name: String::from(""),
             mass: 1.0,
             inertia_tensor: [0.0; 6],
@@ -238,11 +238,7 @@ impl ArticulationLinkBuilder {
         parent: PartHandle,
         joint_transform: Option<Mat4>,
     ) -> PartHandle {
-        let parent_quat = Quat::from_rotation_ypr(
-            Angle::from_radians(self.parent_rotation.x()),
-            Angle::from_radians(self.parent_rotation.y()),
-            Angle::from_radians(self.parent_rotation.z()),
-        );
+        let parent_quat = self.parent_rotation;
 
         let transform = Mat4::from_rotation_translation(parent_quat, self.parent_offset);
         let raw_link = body.create_link(parent, Some(transform), joint_transform);
@@ -285,7 +281,7 @@ impl ArticulationLinkBuilder {
         self
     }
 
-    pub fn parent_rotation(mut self, parent_rotation: Vec3) -> Self {
+    pub fn parent_rotation(mut self, parent_rotation: Quat) -> Self {
         self.parent_rotation = parent_rotation;
         self
     }
