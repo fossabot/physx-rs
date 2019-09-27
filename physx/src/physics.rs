@@ -145,7 +145,7 @@ impl Physics {
 
     pub fn create_rigid_static(&mut self, transform: Mat4) -> RigidStatic {
         let px_rs =
-            unsafe { PxPhysics_createRigidStatic_mut(self.get_raw_mut(), &na_to_px_tf(transform)) };
+            unsafe { PxPhysics_createRigidStatic_mut(self.get_raw_mut(), &gl_to_px_tf(transform)) };
 
         RigidStatic::new(px_rs)
     }
@@ -160,11 +160,11 @@ impl Physics {
     ) -> RigidDynamic {
         let px_rs = phys_PxCreateDynamic(
             self.get_raw_mut(),
-            &na_to_px_tf(transform),
+            &gl_to_px_tf(transform),
             geometry,
             material,
             density,
-            &na_to_px_tf(shape_transform),
+            &gl_to_px_tf(shape_transform),
         );
 
         RigidDynamic::new(px_rs)
@@ -179,10 +179,10 @@ impl Physics {
     ) -> RigidStatic {
         let px_rs = phys_PxCreateStatic(
             self.get_raw_mut(),
-            &na_to_px_tf(transform),
+            &gl_to_px_tf(transform),
             geometry,
             material,
-            &na_to_px_tf(shape_transform),
+            &gl_to_px_tf(shape_transform),
         );
 
         RigidStatic::new(px_rs)

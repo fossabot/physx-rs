@@ -17,7 +17,7 @@ use super::{
     rigid_dynamic::RigidDynamic,
     rigid_static::*,
     traits::*,
-    transform::{na_to_px_v3, px_to_na_v3},
+    transform::{gl_to_px_v3, px_to_gl_v3},
     user_data::UserData,
     visual_debugger::*,
 };
@@ -234,8 +234,8 @@ impl Scene {
                     .read()
                     .expect("failed reading from scene")
                     .expect("accessing null ptr"),
-                &na_to_px_v3(position),
-                &na_to_px_v3(down),
+                &gl_to_px_v3(position),
+                &gl_to_px_v3(down),
                 max_dist,
                 PxSceneQueryFlags {
                     mBits: PxHitFlag::ePOSITION as u16,
@@ -251,7 +251,7 @@ impl Scene {
             PxQueryFilterCallback_delete(filter_callback);
 
             if hit_anything {
-                Some(px_to_na_v3(hit.position))
+                Some(px_to_gl_v3(hit.position))
             } else {
                 None
             }
@@ -535,7 +535,7 @@ impl SceneBuilder {
             };
 
             scene_desc.cpuDispatcher = dispatcher;
-            scene_desc.gravity = na_to_px_v3(self.gravity);
+            scene_desc.gravity = gl_to_px_v3(self.gravity);
 
             if let Some(filter_shader) = self.simulation_filter_shader {
                 physx_sys::enable_custom_filter_shader(

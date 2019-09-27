@@ -9,7 +9,7 @@
 
 */
 
-use super::{foundation::*, geometry::*, px_type::*, transform::na_to_px_v3};
+use super::{foundation::*, geometry::*, px_type::*, transform::gl_to_px_v3};
 use glam::Vec3;
 use physx_macros::*;
 use physx_sys::*;
@@ -55,7 +55,7 @@ impl Cooking {
                 );
 
                 let mesh_scale = Vec3::new(XZ_SCALE, HEIGHT_SCALE, XZ_SCALE);
-                let mesh_scale = PxMeshScale_new_2(&na_to_px_v3(mesh_scale));
+                let mesh_scale = PxMeshScale_new_2(&gl_to_px_v3(mesh_scale));
 
                 Ok(Geometry::TriangleMesh(PxTriangleMeshGeometry_new_1(
                     tri_mesh,

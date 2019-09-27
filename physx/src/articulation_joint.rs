@@ -11,7 +11,7 @@
 
 use super::articulation_joint_base::ArticulationJointBase;
 use super::px_type::*;
-use super::transform::na_to_px_q;
+use super::transform::gl_to_px_q;
 use glam::Quat;
 use log::*;
 use physx_macros::*;
@@ -50,7 +50,7 @@ impl ArticulationJoint {
     /// not implemented yet, not work for reduced coordinate
     pub fn set_orientation(&mut self, quat: Quat) {
         unsafe {
-            PxArticulationJoint_setTargetOrientation_mut(self.get_raw_mut(), &na_to_px_q(quat))
+            PxArticulationJoint_setTargetOrientation_mut(self.get_raw_mut(), &gl_to_px_q(quat))
         };
     }
 }

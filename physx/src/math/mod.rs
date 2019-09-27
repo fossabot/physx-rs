@@ -21,8 +21,8 @@ pub struct Bounds {
 impl From<PxBounds3> for Bounds {
     fn from(other: PxBounds3) -> Self {
         Self {
-            min_size: px_to_na_v3(other.minimum),
-            max_size: px_to_na_v3(other.maximum),
+            min_size: px_to_gl_v3(other.minimum),
+            max_size: px_to_gl_v3(other.maximum),
         }
     }
 }

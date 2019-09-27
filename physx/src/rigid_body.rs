@@ -122,11 +122,11 @@ impl RigidBody {
     }
 
     pub fn get_angular_velocity(&self) -> Vec3 {
-        px_to_na_v3(unsafe { PxRigidBody_getAngularVelocity(self.get_raw()) })
+        px_to_gl_v3(unsafe { PxRigidBody_getAngularVelocity(self.get_raw()) })
     }
 
     pub fn get_linear_velocity(&self) -> Vec3 {
-        px_to_na_v3(unsafe { PxRigidBody_getLinearVelocity(self.get_raw()) })
+        px_to_gl_v3(unsafe { PxRigidBody_getLinearVelocity(self.get_raw()) })
     }
 
     /// Get a tuple (linear_velocity, angular_velocity)
@@ -135,11 +135,11 @@ impl RigidBody {
     }
 
     pub fn set_c_mass_local_pose(&mut self, pose: &Mat4) {
-        unsafe { PxRigidBody_setCMassLocalPose_mut(self.get_raw_mut(), &na_to_px_tf(*pose)) }
+        unsafe { PxRigidBody_setCMassLocalPose_mut(self.get_raw_mut(), &gl_to_px_tf(*pose)) }
     }
 
     pub fn get_c_mass_local_pose(&self) -> Mat4 {
-        unsafe { px_to_na_tf(PxRigidBody_getCMassLocalPose(self.get_raw())) }
+        unsafe { px_to_gl_tf(PxRigidBody_getCMassLocalPose(self.get_raw())) }
     }
 
     pub fn get_mass(&self) -> f32 {
@@ -151,15 +151,15 @@ impl RigidBody {
     }
 
     pub fn set_mass_space_inertia_tensor(&mut self, m: Vec3) {
-        unsafe { PxRigidBody_setMassSpaceInertiaTensor_mut(self.get_raw_mut(), &na_to_px_v3(m)) }
+        unsafe { PxRigidBody_setMassSpaceInertiaTensor_mut(self.get_raw_mut(), &gl_to_px_v3(m)) }
     }
 
     pub fn get_mass_space_inertia_tensor(&self) -> Vec3 {
-        unsafe { px_to_na_v3(PxRigidBody_getMassSpaceInertiaTensor(self.get_raw())) }
+        unsafe { px_to_gl_v3(PxRigidBody_getMassSpaceInertiaTensor(self.get_raw())) }
     }
 
     pub fn get_mass_space_inv_inertia_tensor(&self) -> Vec3 {
-        unsafe { px_to_na_v3(PxRigidBody_getMassSpaceInvInertiaTensor(self.get_raw())) }
+        unsafe { px_to_gl_v3(PxRigidBody_getMassSpaceInvInertiaTensor(self.get_raw())) }
     }
 
     pub fn set_linear_damping(&mut self, lin_damp: f32) {
@@ -180,13 +180,13 @@ impl RigidBody {
 
     pub fn set_linear_velocity(&mut self, lin_vel: Vec3, autowake: bool) {
         unsafe {
-            PxRigidBody_setLinearVelocity_mut(self.get_raw_mut(), &na_to_px_v3(lin_vel), autowake)
+            PxRigidBody_setLinearVelocity_mut(self.get_raw_mut(), &gl_to_px_v3(lin_vel), autowake)
         }
     }
 
     pub fn set_angular_velocity(&mut self, ang_vel: Vec3, autowake: bool) {
         unsafe {
-            PxRigidBody_setAngularVelocity_mut(self.get_raw_mut(), &na_to_px_v3(ang_vel), autowake)
+            PxRigidBody_setAngularVelocity_mut(self.get_raw_mut(), &gl_to_px_v3(ang_vel), autowake)
         }
     }
 
@@ -210,7 +210,7 @@ impl RigidBody {
         unsafe {
             PxRigidBody_addForce_mut(
                 self.get_raw_mut(),
-                &na_to_px_v3(force),
+                &gl_to_px_v3(force),
                 mode.into(),
                 autowake,
             )
@@ -221,7 +221,7 @@ impl RigidBody {
         unsafe {
             PxRigidBody_addTorque_mut(
                 self.get_raw_mut(),
-                &na_to_px_v3(torque),
+                &gl_to_px_v3(torque),
                 mode.into(),
                 autowake,
             )
@@ -240,8 +240,8 @@ impl RigidBody {
         unsafe {
             PxRigidBody_setForceAndTorque_mut(
                 self.get_raw_mut(),
-                &na_to_px_v3(force),
-                &na_to_px_v3(torque),
+                &gl_to_px_v3(force),
+                &gl_to_px_v3(torque),
                 mode.into(),
             )
         }

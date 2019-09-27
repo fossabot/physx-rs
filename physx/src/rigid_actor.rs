@@ -17,7 +17,7 @@ use super::{
     shape::CollisionLayer,
     shape::Shape,
     traits::*,
-    transform::{na_to_px_tf, px_to_na_tf, px_to_na_v3},
+    transform::{gl_to_px_tf, px_to_gl_tf, px_to_gl_v3},
     user_data::UserData,
 };
 use enumflags2::BitFlags;
@@ -48,18 +48,18 @@ impl RigidActor {
 
     /// Get the global pose of this rigid actor
     pub fn get_global_pose(&self) -> Mat4 {
-        px_to_na_tf(unsafe { PxRigidActor_getGlobalPose(self.get_raw()) })
+        px_to_gl_tf(unsafe { PxRigidActor_getGlobalPose(self.get_raw()) })
     }
 
     /// Get the global pose of this rigid actor
     pub fn get_global_position(&self) -> Vec3 {
-        px_to_na_v3(unsafe { PxRigidActor_getGlobalPose(self.get_raw()).p })
+        px_to_gl_v3(unsafe { PxRigidActor_getGlobalPose(self.get_raw()).p })
     }
 
     /// Set the global pose of this rigid actor
     pub fn set_global_pose(&mut self, pose: Mat4, autowake: bool) {
         unsafe {
-            PxRigidActor_setGlobalPose_mut(self.get_raw_mut(), &na_to_px_tf(pose), autowake);
+            PxRigidActor_setGlobalPose_mut(self.get_raw_mut(), &gl_to_px_tf(pose), autowake);
         }
     }
 
@@ -82,7 +82,7 @@ impl RigidActor {
             let mut buffer = [null_mut(); 1];
             PxRigidActor_getShapes(self.get_raw(), buffer.as_mut_ptr(), 1, index);
 
-            px_to_na_tf(PxShapeExt_getGlobalPose_mut(buffer[0], self.get_raw()))
+            px_to_gl_tf(PxShapeExt_getGlobalPose_mut(buffer[0], self.get_raw()))
         }
     }
 
@@ -146,7 +146,7 @@ impl RigidActor {
                 shapeflags,
             );
 
-            PxShape_setLocalPose_mut(shape, &na_to_px_tf((translation * orientation) * rotation));
+            PxShape_setLocalPose_mut(shape, &gl_to_px_tf((translation * orientation) * rotation));
         };
     }
 

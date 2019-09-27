@@ -91,13 +91,12 @@ impl ArticulationReducedCoordinate {
 
         let parent_quat = builder.parent_rotation;
 
-        //let transform = nalgebra::Isometry3::from_parts(builder.parent_offset.into(), parent_quat);
         let transform = Mat4::from_rotation_translation(parent_quat, builder.parent_offset);
         let root_raw_link = unsafe {
             PxArticulationBase_createLink_mut(
                 articulation as *mut PxArticulationBase,
                 null_mut(),
-                &na_to_px_tf(transform),
+                &gl_to_px_tf(transform),
             )
         };
 
@@ -233,7 +232,7 @@ impl ArticulationReducedCoordinate {
         unsafe {
             PxArticulationReducedCoordinate_teleportRootLink_mut(
                 self.get_raw_mut(),
-                &na_to_px_tf(pose),
+                &gl_to_px_tf(pose),
                 true,
             );
         }
@@ -479,7 +478,7 @@ impl ArticulationReducedCoordinate {
             PxRigidBodyExt_getVelocityAtPos_mut(self.root().deref().get_raw(), &props.centerOfMass)
         };
 
-        (px_to_na_v3(props.centerOfMass), px_to_na_v3(com_vel))
+        (px_to_gl_v3(props.centerOfMass), px_to_gl_v3(com_vel))
     }
 
     pub fn get_origin(&self) -> Vec3 {

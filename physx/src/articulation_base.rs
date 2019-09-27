@@ -185,7 +185,7 @@ impl ArticulationBase {
         } else {
             let parent_link = parent.1 as *mut PxArticulationLink;
             (parent_link, unsafe {
-                px_to_na_tf(PxRigidActor_getGlobalPose(
+                px_to_gl_tf(PxRigidActor_getGlobalPose(
                     parent_link as *const PxRigidActor,
                 ))
             })
@@ -198,7 +198,7 @@ impl ArticulationBase {
             PxArticulationBase_createLink_mut(
                 self.get_raw_mut(),
                 parent,
-                &na_to_px_tf(trans * transform),
+                &gl_to_px_tf(trans * transform),
             )
         }
     }

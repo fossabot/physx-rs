@@ -9,7 +9,7 @@
 
 */
 
-use super::transform::{na_to_px_tf, px_to_na_tf};
+use super::transform::{gl_to_px_tf, px_to_gl_tf};
 use super::{
     articulation_joint_reduced_coordinate::ArticulationJointReducedCoordinate,
     articulation_link::ArticulationLink, base::Base, px_type::*,
@@ -31,25 +31,25 @@ impl ArticulationJointBase {
     /// Set the pose of the joint in the child frame
     pub fn set_child_pose(&mut self, pose: Mat4) {
         unsafe {
-            PxArticulationJointBase_setChildPose_mut(self.get_raw_mut(), &na_to_px_tf(pose));
+            PxArticulationJointBase_setChildPose_mut(self.get_raw_mut(), &gl_to_px_tf(pose));
         }
     }
 
     /// Get the pose of the joint in the child frame
     pub fn get_child_pose(&self) -> Mat4 {
-        px_to_na_tf(unsafe { PxArticulationJointBase_getChildPose(self.get_raw()) })
+        px_to_gl_tf(unsafe { PxArticulationJointBase_getChildPose(self.get_raw()) })
     }
 
     /// Set the pose of the joint in the parent frame
     pub fn set_parent_pose(&mut self, pose: Mat4) {
         unsafe {
-            PxArticulationJointBase_setParentPose_mut(self.get_raw_mut(), &na_to_px_tf(pose));
+            PxArticulationJointBase_setParentPose_mut(self.get_raw_mut(), &gl_to_px_tf(pose));
         }
     }
 
     /// Get the pose of the joint in the parent frame
     pub fn get_parent_pose(&self) -> Mat4 {
-        px_to_na_tf(unsafe { PxArticulationJointBase_getParentPose(self.get_raw()) })
+        px_to_gl_tf(unsafe { PxArticulationJointBase_getParentPose(self.get_raw()) })
     }
 
     pub fn get_parent_articulation_link(&self) -> ArticulationLink {
