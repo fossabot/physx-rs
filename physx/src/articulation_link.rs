@@ -245,7 +245,7 @@ impl ArticulationLinkBuilder {
         );
 
         let transform = Mat4::from_rotation_translation(parent_quat, self.parent_offset);
-        let raw_link = body.create_link(parent, Some(transform.into()), joint_transform);
+        let raw_link = body.create_link(parent, Some(transform), joint_transform);
 
         let mut link = ArticulationLink::new(raw_link);
         if let UserData::RigidActor(data) = link.user_data_mut() {
@@ -256,8 +256,8 @@ impl ArticulationLinkBuilder {
             let geometry: PhysicsGeometry = collider.into();
             let collider_pose = Isometry::from_mat4(&self.collider_transform);
 
-            let collider_orientation: Mat4 = collider_pose.rotation.into();
-            let collider_translation: Mat4 = collider_pose.translation.into();
+            let collider_orientation: Mat4 = collider_pose.rotation;
+            let collider_translation: Mat4 = collider_pose.translation;
 
             link.create_exclusive_shape(geometry, collider_orientation, collider_translation);
         } else {

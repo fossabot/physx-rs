@@ -94,14 +94,11 @@ impl<'a> HeightfieldBuilder<'a> {
         for y in 0..self.size.1 {
             for x in 0..self.size.0 {
                 let index = y * self.size.0 + x;
-                vertices.push(
-                    Vec3::new(
-                        x as f32 * XZ_SCALE,
-                        heights[index] * HEIGHT_SCALE,
-                        y as f32 * XZ_SCALE,
-                    )
-                    .into(),
-                );
+                vertices.push(Vec3::new(
+                    x as f32 * XZ_SCALE,
+                    heights[index] * HEIGHT_SCALE,
+                    y as f32 * XZ_SCALE,
+                ));
             }
         }
         vertices

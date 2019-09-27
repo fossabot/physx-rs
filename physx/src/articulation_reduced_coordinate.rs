@@ -101,7 +101,7 @@ impl ArticulationReducedCoordinate {
             PxArticulationBase_createLink_mut(
                 articulation as *mut PxArticulationBase,
                 null_mut(),
-                &na_to_px_tf(transform.into()),
+                &na_to_px_tf(transform),
             )
         };
 
