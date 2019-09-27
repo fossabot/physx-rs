@@ -58,7 +58,10 @@ mod tests {
     use glam::{deg, Mat4, Vec3};
     #[test]
     fn isometry() {
-        let rot = Mat4::from_rotation_y(deg(90.0));
+        let rot_y = Mat4::from_rotation_y(deg(40.0));
+        let rot_x = Mat4::from_rotation_x(deg(30.0));
+        let rot_z = Mat4::from_rotation_x(deg(20.0));
+        let rot = rot_y * rot_x * rot_z;
         let trans = Mat4::from_translation(Vec3::new(1.0, 2.0, 3.0));
         let m = trans * rot;
         let iso = Isometry::from_mat4(&m);
