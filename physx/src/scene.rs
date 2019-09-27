@@ -227,7 +227,7 @@ impl Scene {
             }
 
             let filter_callback = create_raycast_filter_callback(ignored_body);
-            let mut hit: PxRaycastHit = std::mem::uninitialized();
+            let mut hit = std::mem::MaybeUninit::uninit();
 
             let hit_anything = PxSceneQueryExt_raycastSingle_mut(
                 self.px_scene
@@ -240,11 +240,13 @@ impl Scene {
                 PxSceneQueryFlags {
                     mBits: PxHitFlag::ePOSITION as u16,
                 },
-                &mut hit,
+                hit.as_mut_ptr(),
                 &filter_data as *const PxQueryFilterData as *const PxSceneQueryFilterData,
                 filter_callback as *mut PxQueryFilterCallback as *mut PxSceneQueryFilterCallback,
                 null_mut(),
             );
+
+            let hit = hit.assume_init();
 
             PxQueryFilterCallback_delete(filter_callback);
 

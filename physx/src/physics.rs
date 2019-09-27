@@ -20,34 +20,38 @@ use std::ptr::null_mut;
 pub const PX_PHYSICS_VERSION: u32 = (4 << 24) + (1 << 16);
 
 #[no_mangle]
-pub unsafe extern "C" fn on_contact_callback(
+pub extern "C" fn on_contact_callback(
     userdata: *mut std::ffi::c_void,
     header: *const PxContactPairHeader,
     pairs: *const PxContactPair,
     count: u32,
 ) {
-    if let Some(header) = header.as_ref() {
-        let scene: &mut Scene = &mut *(userdata as *mut Scene);
-        let first_px_actor = header.actors[0];
-        let second_px_actor = header.actors[1];
-        let pairs = std::slice::from_raw_parts(pairs, count as usize);
-        scene.collide_raw_pair(first_px_actor, second_px_actor, pairs);
+    unsafe {
+        if let Some(header) = header.as_ref() {
+            let scene: &mut Scene = &mut *(userdata as *mut Scene);
+            let first_px_actor = header.actors[0];
+            let second_px_actor = header.actors[1];
+            let pairs = std::slice::from_raw_parts(pairs, count as usize);
+            scene.collide_raw_pair(first_px_actor, second_px_actor, pairs);
+        }
     }
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn simulation_filter_shader(info: *mut FilterShaderCallbackInfo) -> u16 {
-    if let Some(info) = info.as_ref() {
-        (*info.pairFlags).mBits |= (PxPairFlag::eSOLVE_CONTACT
-            | PxPairFlag::eNOTIFY_TOUCH_FOUND
-            | PxPairFlag::eNOTIFY_CONTACT_POINTS) as u16;
-        if (info.filterData0.word0 & info.filterData1.word1) == 0 {
-            PxFilterFlag::eSUPPRESS as u16
+pub extern "C" fn simulation_filter_shader(info: *mut FilterShaderCallbackInfo) -> u16 {
+    unsafe {
+        if let Some(info) = info.as_ref() {
+            (*info.pairFlags).mBits |= (PxPairFlag::eSOLVE_CONTACT
+                | PxPairFlag::eNOTIFY_TOUCH_FOUND
+                | PxPairFlag::eNOTIFY_CONTACT_POINTS) as u16;
+            if (info.filterData0.word0 & info.filterData1.word1) == 0 {
+                PxFilterFlag::eSUPPRESS as u16
+            } else {
+                PxFilterFlag::eDEFAULT as u16
+            }
         } else {
             PxFilterFlag::eDEFAULT as u16
         }
-    } else {
-        PxFilterFlag::eDEFAULT as u16
     }
 }
 

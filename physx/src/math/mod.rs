@@ -34,9 +34,9 @@ pub struct Isometry {
 impl Isometry {
     /// Extracts the rotation and translation matrix from a matrix.
     pub fn from_mat4(m: &Mat4) -> Self {
-        let x = m.x_axis().truncate().extend(0.0).normalize();
-        let y = m.y_axis().truncate().extend(0.0).normalize();
-        let z = m.z_axis().truncate().extend(0.0).normalize();
+        let x = m.x_axis().normalize();
+        let y = m.y_axis().normalize();
+        let z = m.z_axis().normalize();
         let rotation = Mat4::new(x, y, z, Vec4::unit_w());
         let translation = Mat4::from_translation(m.w_axis().truncate());
         Self {
@@ -44,4 +44,20 @@ impl Isometry {
             translation,
         }
     }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::Isometry;
+    use glam::{deg, Mat4, Vec3};
+    #[test]
+    fn isometry() {
+        let rot = Mat4::from_rotation_y(deg(90.0));
+        let trans = Mat4::from_translation(Vec3::new(1.0, 2.0, 3.0));
+        let m = trans * rot;
+        let iso = Isometry::from_mat4(&m);
+        assert!(iso.translation == trans);
+        assert!(iso.rotation == rot);
+    }
+
 }
