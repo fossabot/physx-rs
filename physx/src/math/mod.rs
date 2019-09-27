@@ -37,6 +37,9 @@ impl Isometry {
         let x = m.x_axis().normalize();
         let y = m.y_axis().normalize();
         let z = m.z_axis().normalize();
+
+        assert!(x.w() == 0.0 && y.w() == 0.0 && z.w() == 0.0, "Unable to extract the rotation matrix because one of the W components of the axis wasn't 0.0");
+
         let rotation = Mat4::new(x, y, z, Vec4::unit_w());
         let translation = Mat4::from_translation(m.w_axis().truncate());
         Self {
