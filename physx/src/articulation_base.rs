@@ -13,7 +13,7 @@ use super::{
     articulation_link::ArticulationLink, base::Base, body::*, math::Bounds, px_type::*,
     transform::*, user_data::UserData,
 };
-use glam::{Mat4};
+use glam::Mat4;
 use physx_macros::*;
 use physx_sys::{
     PxArticulationBase, PxArticulationBase_createLink_mut, PxArticulationBase_getNbLinks,

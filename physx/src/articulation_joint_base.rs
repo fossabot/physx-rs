@@ -14,7 +14,7 @@ use super::{
     articulation_joint_reduced_coordinate::ArticulationJointReducedCoordinate,
     articulation_link::ArticulationLink, base::Base, px_type::*,
 };
-use glam::{Mat4};
+use glam::Mat4;
 use physx_macros::*;
 use physx_sys::{
     PxArticulationJointBase, PxArticulationJointBase_getChildPose,

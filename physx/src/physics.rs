@@ -13,7 +13,7 @@ use super::{
     rigid_dynamic::*, rigid_static::*, scene::*, traits::GetRaw, transform::*, visual_debugger::*,
 };
 
-use glam::{Mat4, Vec3, };
+use glam::{Mat4, Vec3};
 use physx_sys::*;
 use std::ptr::null_mut;
 
