@@ -34,10 +34,13 @@ pub struct Isometry {
 impl Isometry {
     /// Extracts the rotation and translation matrix from a matrix.
     pub fn from_mat4(m: &Mat4) -> Self {
-        let x = m.x_axis().normalize();
-        let y = m.y_axis().normalize();
-        let z = m.z_axis().normalize();
-
+        let x = m.x_axis();
+        let y = m.y_axis();
+        let z = m.z_axis();
+        assert!(
+            x.is_normalized() && y.is_normalized() && z.is_normalized(),
+            "All axis have to be of length 1"
+        );
         assert!(x.w() == 0.0 && y.w() == 0.0 && z.w() == 0.0, "Unable to extract the rotation matrix because one of the W components of the axis wasn't 0.0");
 
         let rotation = Mat4::new(x, y, z, Vec4::unit_w());
