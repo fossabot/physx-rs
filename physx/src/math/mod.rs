@@ -59,5 +59,4 @@ mod tests {
         assert!(iso.translation == trans);
         assert!(iso.rotation == rot);
     }
-
 }
