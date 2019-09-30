@@ -55,17 +55,52 @@ impl Isometry {
 #[cfg(test)]
 mod tests {
     use super::Isometry;
-    use glam::{deg, Mat4, Vec3};
+    use glam::f32::{deg, rad, Mat4, Quat, Vec3, Vec4};
+    fn compare_vec4(v1: &Vec4, v2: &nalgebra_glm::Vec4) -> bool {
+        let cmp = |f1, f2| f32::abs(f1 - f2) <= std::f32::EPSILON;
+        cmp(v1.x(), v2.x) && cmp(v1.y(), v2.y) && cmp(v1.z(), v2.z) && cmp(v1.w(), v2.w)
+    }
+    fn compare_mat(m1: &Mat4, m2: &nalgebra_glm::Mat4) -> bool {
+        compare_vec4(&m1.x_axis(), &m2.column(0).into())
+    }
     #[test]
     fn isometry() {
-        let rot_y = Mat4::from_rotation_y(deg(40.0));
-        let rot_x = Mat4::from_rotation_x(deg(30.0));
-        let rot_z = Mat4::from_rotation_x(deg(20.0));
+        let rot_z = Mat4::from_rotation_z(deg(40.0));
+        let rot_y = Mat4::from_rotation_y(deg(30.0));
+        let rot_x = Mat4::from_rotation_x(deg(20.0));
         let rot = rot_y * rot_x * rot_z;
         let trans = Mat4::from_translation(Vec3::new(1.0, 2.0, 3.0));
         let m = trans * rot;
+
         let iso = Isometry::from_mat4(&m);
         assert!(iso.translation == trans);
         assert!(iso.rotation == rot);
+
+        let rot_z = nalgebra_glm::rotate_z(&nalgebra_glm::identity(), f32::to_radians(40.0));
+        let rot_y = nalgebra_glm::rotate_y(&nalgebra_glm::identity(), f32::to_radians(30.0));
+        let rot_x = nalgebra_glm::rotate_x(&nalgebra_glm::identity(), f32::to_radians(20.0));
+        let rot = rot_y * rot_x * rot_z;
+
+        let trans = nalgebra_glm::translate(
+            &nalgebra_glm::identity(),
+            &nalgebra_glm::vec3(1.0, 2.0, 3.0),
+        );
+        let m_nal = trans * rot;
+        assert!(compare_mat(&m, &m_nal));
+
+        // Isometry tests
+
+        let q = Quat::from_rotation_y(rad(0.2)) * Quat::from_rotation_x(rad(0.1));
+        let q_nal = nalgebra::UnitQuaternion::from_axis_angle(&nalgebra::Vector3::y_axis(), 0.2)
+            * nalgebra::UnitQuaternion::from_axis_angle(&nalgebra::Vector3::x_axis(), 0.1);
+
+        //let q = Quat::from_rotation_ypr(rad(0.3), rad(0.2), rad(0.1));
+        let transform = Mat4::from_rotation_translation(q, Vec3::new(1.0, 2.0, 3.0));
+
+        let transform_nal =
+            nalgebra::Isometry3::from_parts(nalgebra_glm::vec3(1.0, 2.0, 3.0).into(), q_nal);
+
+        let transform_nal_m = transform_nal.into();
+        assert!(compare_mat(&transform, &transform_nal_m));
     }
 }
